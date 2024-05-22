@@ -11,17 +11,23 @@ A lead includes:
 - email
 - resume / CV
 
-Each lead also has a STATE: (PENDING/REACHED_OUT)
+Each lead also has a STATE: (PENDING / REACHED_OUT)
 this state is manually marked by attorney
 
 ## Design
 
-Schema for Lead:
-- LEAD_ID - INT - PK
-- FIRST_NAME - STRING (Req)
-- LAST_NAME - STRING (Req)
-- EMAIL - STRING (Req)
-- RESUME - STRING (Optional)
+## Lead Schema
+
+The `Lead` model represents a lead in the system with the following attributes:
+
+| Column Name | Data Type | Description                  | Required |
+|-------------|------------|------------------------------|----------|
+| `LEAD_ID`   | `INT`      | Primary Key                  | Yes      |
+| `FIRST_NAME`| `STRING`   | First name of the lead       | Yes      |
+| `LAST_NAME` | `STRING`   | Last name of the lead        | Yes      |
+| `EMAIL`     | `STRING`   | Email address of the lead    | Yes      |
+| `RESUME`    | `STRING`   | Resume of the lead           | No       |
+
 
 Will assume the Resume is plain text for now, can double as CV.
 
@@ -35,30 +41,29 @@ __Cons:__
 - migration from SQLLite to something like Postgres isnt 1to1, certain fields dont translate
 
 ### APIs:
-#### /create 
-    - submit json with required lead params. creates lead, sets status to PENDING, returns id
+#### `/create `
+- submit json with required lead params. creates lead, sets status to PENDING, returns id
+- will start with no validation to see if lead already exists
+- add no duplicate emails if have time, can extend validation later
 
-    - will start with no validation to see if lead already exists
-    - add no duplicate emails if have time, can extend validation later
+#### `/get `
+- returns all leads
+- would be used to hydrate leads for internal UI
+- in future could add certain filters to return specific views of leads
 
-#### /get 
-    - returns all leads
-    - would be used to hydrate leads for internal UI
-    - in future could add certain filters to return specific views of leads
-
-#### /get{lead_id} 
-    - returns data of specific lead id
+#### `/get{lead_id} `
+- returns data of specific lead id
 
 
-#### /update{lead_id}
-    - takes in json with required lead params.
-    - verify that email doesnt exist for another user
-    - update lead_id object to reflect updated lead. 
-    - return lead_id if success
+#### `/update{lead_id}`
+- takes in json with required lead params.
+- TODO: verify that email doesnt exist for another user
+- update lead_id object to reflect updated lead. 
+- return lead_id if success
 
-This can be a very dangerous api, originally planned to use /setReached{lead_id} api to allow safe
-update to leads and only allow changing the STATE. But requirements does say updating leads should
-be allowed so will allow all fields to be updated
+    /update can be a very dangerous api, originally planned to use /setReached{lead_id} api to allow safe
+    update to leads and only allow changing the STATE. But requirements does say updating leads should
+    be allowed so will allow all fields to be updated
 
 
 ### To Run
@@ -151,3 +156,13 @@ Response:
 Info: 
 Returns all leads in database. So far we only have these 2
 ```
+
+
+## Recap
+A handful of assumptions have been made for this project.
+I am assuming low scale, simple objects, and assuming a UI would be created to fit my specifications.
+
+My biggest challenge with this project is knowing how much effort to put into it? I have a very solid simple service
+but not sure if something way over the top is being looked for. given the requirements i hope this is fine
+
+Thank you for reviewing my code!
