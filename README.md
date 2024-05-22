@@ -13,7 +13,7 @@ A lead includes:
 
 Each lead also has a STATE: (PENDING / REACHED_OUT)
 this state is manually marked by attorney
-
+---
 ## Design
 
 ## Lead Schema
@@ -66,7 +66,12 @@ __Cons:__
     be allowed so will allow all fields to be updated
 
 
-### To Run
+To structure this project, Ive split into 3 logical files.
+One for main service logic, one for db setup, one for models. splitting it this way from experience.
+should be enough separation for now.
+
+---
+## To Run
 
 - Run `pip install -r requirements.txt`
 - Run `uvicorn main:app --reload`
