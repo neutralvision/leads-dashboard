@@ -66,11 +66,11 @@ be allowed so will allow all fields to be updated
 - Run `pip install -r requirements.txt`
 - Run `uvicorn main:app --reload`
 
-App is now running. Below you will find some tests to run
+You are live! Look below for some test curl commands. Run these in order for a walkthrough.
+You'll need a fresh db for these to run correctly. just delete your `leads.db` file to reset.
 
 
-- Hello World:
-Sanity test. verify a hello world response
+- Sanity Test
 
 ```
 curl http://localhost:8000
@@ -78,6 +78,8 @@ curl http://localhost:8000
 Response:
 "hello world!"
 
+Info:
+Basic ping test. if you see the correct response, continue onto the next!
 ```
 
 - Test CREATE
@@ -89,7 +91,6 @@ Response:
 
 Info:
 Creates a new Lead with name John Doe. The return is the lead_id of our new lead
-
 ```
 - Test UPDATE
 ```
@@ -108,7 +109,7 @@ and changes status to REACHED_OUT
 curl "http://localhost:8000/get?lead_id=1"
 
 Response:
-[{"RESUME":"This is a resumeeee","LAST_NAME":"Meff","EMAIL":"john.doe@example.com","LEAD_ID":1,"FIRST_NAME":"Jeff","STATE":"PENDING"}]%
+[{"LAST_NAME":"Meff","EMAIL":"john.doe@example.com","STATE":"PENDING","RESUME":"This is a resume","FIRST_NAME":"Jeff","LEAD_ID":1}]%
 
 Info:
 Retrieves our updated lead 1. note the name, resume and status change
@@ -145,8 +146,8 @@ We have now added our second lead. the service returns our associated lead id
 curl "http://localhost:8000/get"
 
 Response:
-[Jeff, Apple lead objects]
+[{"LAST_NAME":"Meff","EMAIL":"john.doe@example.com","STATE":"PENDING","RESUME":"This is a resume","FIRST_NAME":"Jeff","LEAD_ID":1},{"LAST_NAME":"Bye","EMAIL":"appleBye@gmail.com","STATE":"PENDING","RESUME":null,"FIRST_NAME":"Apple","LEAD_ID":2}]  
 
 Info: 
-Returns all leads in database. So far we only have 2
+Returns all leads in database. So far we only have these 2
 ```

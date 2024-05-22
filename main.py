@@ -1,3 +1,4 @@
+import logging
 from typing import Optional
 
 from fastapi import FastAPI, Depends, HTTPException
@@ -11,11 +12,13 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
+    """Root endpoint for ping tests"""
     return "hello world!"
 
 
 @app.post("/create")
 async def create_leads(lead: LeadCreate, db: Session = Depends(get_db)):
+    """Creates a new lead in the database"""
 
     new_lead = Lead(
         FIRST_NAME=lead.FIRST_NAME,
@@ -28,17 +31,16 @@ async def create_leads(lead: LeadCreate, db: Session = Depends(get_db)):
         db.add(new_lead)
         db.commit()
     except Exception as e:
-        print("error with /create")
-        print(e)
-        # TODO: add better error handling, share across apis
+        logging.exception("Error with /create {}".format(e))
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
-    print("successfully added new lead with id: {}".format(new_lead.LEAD_ID))
+    logging.info("successfully added new lead with id: {}".format(new_lead.LEAD_ID))
     return new_lead.LEAD_ID
 
 
 @app.get("/get")
 async def get_leads(lead_id: Optional[int] = None, db: Session = Depends(get_db)):
+    """Gets a specific lead or all leads from the database, depending on `lead_id`"""
 
     # query with specific lead_id if provided
     if lead_id is not None:
@@ -49,12 +51,13 @@ async def get_leads(lead_id: Optional[int] = None, db: Session = Depends(get_db)
 
     # if no lead_id provided, query all
     leads = db.query(Lead).all()
-
+    logging.info("found {} leads for generic /get".format(len(leads)))
     return leads
 
 
 @app.post("/update")
 async def update_leads(lead: LeadCreate, lead_id: int, db: Session = Depends(get_db)):
+    """Updates a specific lead in the database"""
 
     # grab existing entry
     lead_to_update = db.query(Lead).filter(Lead.LEAD_ID == lead_id).first()
@@ -72,10 +75,9 @@ async def update_leads(lead: LeadCreate, lead_id: int, db: Session = Depends(get
     try:
         db.commit()
     except Exception as e:
-        print("error with /update with lead_id: {}".format(lead.id))
-        print(e)
+        logging.error("error with /update with lead_id: {}, {}".format(lead.id, e))
         raise HTTPException(status_code=500, detail="Unknown error with updating lead")
 
-    print("successfully updated lead with id: {}".format(lead_to_update.LEAD_ID))
+    logging.info("successfully updated lead with id: {}".format(lead_to_update.LEAD_ID))
     return lead_to_update.LEAD_ID
 
