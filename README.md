@@ -62,6 +62,12 @@ be allowed so will allow all fields to be updated
 
 ### To Run
 
+- Run `pip install -r requirements.txt`
 - Run `uvicorn main:app --reload`
-
+- 
 - Test Curl: `curl http://localhost:8000`
+
+- Test POST
+```
+curl -X POST "http://127.0.0.1:8000/create" -H "Content-Type: application/json" -d '{"FIRST_NAME": "John", "LAST_NAME": "Doe", "EMAIL": "john.doe@example.com", "RESUME": "This is a resume"}'
+```
