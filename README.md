@@ -17,11 +17,11 @@ this state is manually marked by attorney
 ## Design
 
 Schema for Lead:
-- LEAD_ID
-- FIRST_NAME
-- LAST_NAME
-- EMAIL
-- RESUME
+- LEAD_ID - INT - PK
+- FIRST_NAME - STRING (Req)
+- LAST_NAME - STRING (Req)
+- EMAIL - STRING (Req)
+- RESUME - STRING (Optional)
 
 Will assume the Resume is plain text for now, can double as CV.
 
@@ -37,6 +37,7 @@ __Cons:__
 ### APIs:
 #### /create 
     - submit json with required lead params. creates lead, sets status to PENDING, returns id
+
     - will start with no validation to see if lead already exists
     - add no duplicate emails if have time, can extend validation later
 

@@ -1,3 +1,6 @@
+from typing import Optional
+
+from pydantic import BaseModel, EmailStr
 from sqlalchemy import Column, Integer, String, Enum
 import enum
 from sqlalchemy.ext.declarative import declarative_base
@@ -20,4 +23,10 @@ class Lead(Base):
     RESUME = Column(String)
     STATE = Column(Enum(LeadState), default=LeadState.PENDING)
 
+
 # REQUEST MODELS:
+class LeadCreate(BaseModel):
+    FIRST_NAME: str
+    LAST_NAME: str
+    EMAIL: EmailStr
+    RESUME: Optional[str] = None
